@@ -1,0 +1,183 @@
+﻿@model EmployeeManagementApplication.Models.Employee
+
+@{
+    ViewData["Title"] = "Edit";
+   
+}
+<h4>Edit Employee Details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="EmployeeId" />
+            <div class="row">
+                <div class="form-group col-4">
+                    <label  class="control-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label class="control-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+            </div>
+            
+            <div class="row">
+                <div class="form-group col-4">
+                    <label class="control-label">Date of Birth</label>
+
+                    <input asp-for="DateOfBirth" class="form-control" onchange="getAge(this)" id="datepicker" placeholder="dd/mm/yyyy" autocomplete="off" />
+                    <script>
+                        $('#datepicker').datepicker({
+                            uiLibrary: 'bootstrap5',
+                             format: 'dd/mm/yyyy',
+                        });
+                    </script>
+
+                </div>
+
+                <div class="form-group col-4">
+                    <label  class="control-label">Age</label>
+                    <input asp-for="Age" class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+            </div>
+
+          <div class="row">
+                <div class="form-group col-4">
+                    <label class="control-label">City</label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label class="control-label">Country</label>
+                    <input asp-for="Country" class="form-control" />
+                    <span asp-validation-for="Country" class="text-danger"></span>
+                </div>
+          </div>
+           
+          <div class="row">
+                <div class="form-group col-4">
+                    <label  class="control-label">Email Id</label>
+                    <input asp-for="EmailId" class="form-control" />
+                    <span asp-validation-for="EmailId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label  class="control-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+          </div>
+          <div class="row">
+                <div class="form-group col-4">
+                    <label  class="control-label">Department Id</label>
+                    @* <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select> *@
+                    <select class="form-select" asp-for="DepartmentId" asp-items="ViewBag.DepartmentId">
+                        <option selected>Select Department ID</option>
+                        <option value="1">IT</option>
+                        <option value="2">HR</option>
+                        <option value="3">BDE</option>
+                    </select>
+
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label class="control-label">Gender Id</label>
+                    @* <select asp-for="GenderId" class="form-control" asp-items="ViewBag.GenderId"></select> *@
+                    <select class="form-select" asp-for="GenderId" asp-items="ViewBag.GenderId">
+                        <option selected>Select Gender Id</option>
+                        <option value="1">Female</option>
+                        <option value="2">Male</option>
+                        <option value="3">Other</option>
+                    </select>
+                    <span asp-validation-for="GenderId" class="text-danger"></span>
+                </div>
+          </div>
+          
+          <div class="row">
+                <div class="form-group col-4">
+                    <label asp-for="Salary" class="control-label"></label>
+                    <input asp-for="Salary" class="form-control" />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="Hobbies" class="control-label"></label>
+                    <input asp-for="Hobbies" class="form-control" />
+                    <span asp-validation-for="Hobbies" class="text-danger"></span>
+                </div>
+
+          </div>
+
+           
+            <div class="form-group col-5" >
+                <label  class="control-label">Work Address</label>
+                <input asp-for="WorkAddress" class="form-control" />
+                <span asp-validation-for="WorkAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group col-5">
+                <label class="control-label">Home Address</label>
+                <input asp-for="HomeAddress" class="form-control" />
+                <span asp-validation-for="HomeAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group col-5">
+                <label class="control-label">Permanent Address</label>
+                <input asp-for="PermanentAddress" class="form-control" />
+                <span asp-validation-for="PermanentAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a asp-action="demo" class="btn btn-light">Back to List</a>
+                <input type="submit" value="Save" class="btn btn-primary" />
+               
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+            function getAge(e) {
+            let dateString = e.value;
+            let [day, month, year] = dateString.split('/')
+            var today = new Date();
+            var birthDate = new Date(+year, +month - 1, +day);
+            var age = today.getFullYear() - birthDate.getFullYear();
+            var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            document.getElementById("Age").value = age;
+            return age;
+        }
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

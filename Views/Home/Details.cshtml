@@ -1,0 +1,138 @@
+﻿@model List<EmployeeManagementApplication.Models.EmployeeView>
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div>
+    <h4>Employee Detail</h4>
+    <hr />
+    <div>
+    @foreach(var item in Model){
+    <dl class="row"> 
+        <dt class = "col-sm-2">
+            First Name
+        </dt>
+        <dd class = "col-sm-10">
+                @item.FirstName
+             
+        </dd>
+        <dt class = "col-sm-2">
+            Last Name
+        </dt>
+        <dd class="col-sm-10">
+                @item.LastName
+        </dd>
+
+        <dt class="col-sm-2">
+           Gender
+        </dt>
+        <dd class="col-sm-10">
+                @item.GenderName
+        </dd>
+        <dt class = "col-sm-2">
+            Date Of Birth
+        </dt>
+        <dd class = "col-sm-10">
+                @item.DateOfBirth
+        </dd>
+        <dt class = "col-sm-2">
+            Age
+        </dt>
+        <dd class = "col-sm-10">
+                @item.Age
+        </dd>
+        <dt class="col-sm-2">
+            Home Address
+        </dt>
+        <dd class="col-sm-10">
+                @item.HomeAddress
+            
+        </dd>
+        <dt class="col-sm-2">
+           Work Address
+        </dt>
+        <dd class="col-sm-10">
+                @item.WorkAddress
+        </dd>
+        <dt class="col-sm-2">
+           Permanent Address
+        </dt>
+        <dd class="col-sm-10">
+                @item.PermanentAddress
+        </dd>
+        <dt class = "col-sm-2">
+            City
+        </dt>
+        <dd class = "col-sm-10">
+                @item.City
+        </dd>
+        <dt class = "col-sm-2">
+            Country
+        </dt>
+        <dd class = "col-sm-10">
+                @item.Country
+        </dd>
+        <dt class = "col-sm-2">
+            Email
+        </dt>
+        <dd class = "col-sm-10">
+                @item.EmailId
+        </dd>
+        <dt class = "col-sm-2">
+            Phone Number
+        </dt>
+        <dd class = "col-sm-10">
+                @item.PhoneNumber
+        </dd>
+        <dt class = "col-sm-2">
+           Salary
+        </dt>
+        <dd class = "col-sm-10">
+                @item.Salary
+        </dd>
+        <dt class = "col-sm-2">
+           Hobbies
+        </dt>
+        <dd class = "col-sm-10">
+                @item.Hobbies
+        </dd>
+        <dt class = "col-sm-2">
+           Department Name
+        </dt>
+        <dd class = "col-sm-10">
+                @item.DepartmentName
+            @* @Model.DepartmentName *@
+        </dd>
+        
+    </dl>    
+    
+<div>
+                <a asp-action="demo" class="btn btn-light">Back to List</a>
+
+    <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-primary" >Edit</a>
+                <button onclick="window.print()" class="btn btn-primary" style="float:right ; ">Print this page.</button>
+
+   
+</div>
+}
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

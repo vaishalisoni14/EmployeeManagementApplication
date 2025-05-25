@@ -1,0 +1,21 @@
+{
+  "version": "3.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "popper.js@2.11.8",
+      "destination": "wwwroot/plugins/popper.js/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@fontsource/source-sans-pro@5.1.0",
+      "destination": "wwwroot/plugins/fontsource/source-sans-pro/",
+      "files": [
+        "300-italic.min.css",
+        "300-italic.css",
+        "300.min.css",
+        "300.css"
+      ]
+    }
+  ]
+}

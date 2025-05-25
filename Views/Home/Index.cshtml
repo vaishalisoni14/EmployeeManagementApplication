@@ -1,0 +1,572 @@
+﻿@model IEnumerable<EmployeeManagementApplication.Models.EmployeeView>
+
+@{
+    ViewData["Title"] = "Index";
+
+
+    var sortDirection = ViewBag.sortDirection;
+    var sortColumn = ViewBag.sortColumn;
+    var searchKeyword = ViewBag.searchKeyword;
+    var page = ViewBag.page;
+    var pageSize = ViewBag.pageSize;
+    var genderIds = ViewBag.genderIds;
+    var departmentIds = ViewBag.departmentIds;
+    var minAge = ViewBag.minAge;
+    var maxAge = ViewBag.maxAge;
+    var minSalary = ViewBag.minSalary;
+    var maxSalary = ViewBag.maxSalary;
+    var totalPages = ViewBag.totalPages;
+}
+<p>
+   
+  
+
+     <form asp-action="Index" method="get">
+        <div class="row">
+            <div class="col-md-5 mx-auto">
+                <div class="input-group">
+                    <input class="form-control border-end-0 border" type="search" placeholder="Search" id="example-search-input" name="searchKeyword" autocomplete="off">
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+  
+
+
+    <button style="background-color:blue ; border-block-color:aliceblue"><a style="color:white;text-decoration:none;" asp-action="Create" style="text-decoration: none">Add New Employee</a></button>
+
+    <label>Select record size: </label>
+    <select id="pageSizeId" type="search" name="pageSize" min="5" max="50">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+    </select>
+
+
+</p>
+<br />
+
+
+<div class="input-group mb-3 bg-white rounded">
+    <button style="background-color:blue ;text-decoration:none ; color:white;" class="btn btn-outline-secondary w-40 dropdown-toggle" data-bs-auto-close="outside" type="button" data-bs-toggle="dropdown" aria-expanded="false" name="departmentIds">
+        Department
+    </button>
+ 
+    <ul class="nav-treeview dropdown-menu w-40" >
+            
+        <li class="nav-item">
+
+            <input class="nav-icon bi bi-circle" type="checkbox" value="1" id="one" name="departmentIds">
+            <label class="form-check-label" for="one">
+                IT
+            </label>
+        </li>
+        <li>
+            <input class="form-check-input" type="checkbox" value="2" id="two" name="departmentIds">
+            <label class="form-check-label" for="two">
+                HR
+            </label>
+        </li>
+        <li>
+            <input class="form-check-input" type="checkbox" value="3" id="three" name="departmentIds">
+            <label class="form-check-label" for="three">
+                BDE
+            </label>
+        </li>
+
+    </ul>
+
+
+   
+
+
+
+
+
+    <button style="background-color:blue ;text-decoration:none ; color:white;" class="btn btn-outline-secondary w-40 dropdown-toggle" data-bs-auto-close="outside" type="button" data-bs-toggle="dropdown" aria-expanded="false" name="genderIds">Gender</button>
+    <ul class="dropdown-menu w-40">
+        <li>
+            <input class="form-check-input" type="checkbox" value="1" id="one" name="genderIds">
+            <label class="form-check-label" for="one">
+                Female
+            </label>
+        </li>
+        <li>
+            <input class="form-check-input" type="checkbox" value="2" id="two" name="genderIds">
+            <label class="form-check-label" for="two">
+                Male
+            </label>
+        </li>
+        <li>
+            <input class="form-check-input" type="checkbox" value="3" id="three" name="genderIds">
+            <label class="form-check-label" for="three">
+                Other
+            </label>
+        </li>
+
+    </ul>
+
+
+    <div>
+
+        <div class="rangeslider">
+            <input id="minAgeId" class="min" name="minAge" type="range" min="18" max="60" value="18" />
+            <input id="maxAgeId" class="max" name="maxAge" type="range" min="18" max="60" value="60" />
+            <span class="range_min light left">18</span>
+            <span class="range_max light right">60</span>
+        </div>
+
+        <div class="rangeslider">
+
+            <input id="minSalaryId" class="minimum" name="minSalary" type="range" min="10000" max="150000" value="10000" style="margin-left:300px" />
+            <input id="maxSalaryId" class="maximum" name="maxSalary" type="range" min="10000" max="150000" value="150000" style="margin-left:300px" />
+            <span id="SalarySpan" class="range_minimum " style="margin-left:300px">10000</span>
+            <span id="SalarySpan" class="range_maximum " style="margin-left:500px">150000</span>
+
+
+            <input type="submit" id="submitID" style="margin-left:600px" class="btn btn-primary" onclick="updateUrlWithQueryParams()" />
+
+            <a asp-action="Index" class="btn btn-primary" style=" margin:700px; margin-top:-36px" class="btn btn-primary">Clear </a>
+
+            <br />
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<br />
+<br />
+
+
+
+
+
+
+
+<table class="table table-responsive table-hover">
+    <thead>
+        <tr>
+            <th>
+
+                @Html.ActionLink(@Html.DisplayName("First Name"), "index", "home", null, null, null, new
+                    {
+                        searchKeyword = searchKeyword,
+                        sortColumn = "name",
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc",
+                        page = page,
+                        pageSize = pageSize,
+                        departmentIds = departmentIds,
+                        genderIds = genderIds,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        minSalary = minSalary,
+                        maxSalary = maxSalary
+
+                    }, new { @class = "CSSForHeaders" })
+            </th>
+            <th>
+                @Html.ActionLink(@Html.DisplayName("LastName"), "index", "home", null, null, null, new
+                    {
+                        searchKeyword = searchKeyword,
+                        sortColumn = "LastName",
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc",
+                        page = page,
+                        pageSize = pageSize,
+                        departmentIds = departmentIds,
+                        genderIds = genderIds,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        minSalary = minSalary,
+                        maxSalary = maxSalary
+                    }, new { @class = "CSSForHeaders" })
+            </th>
+
+            <th>
+                @Html.ActionLink(Html.DisplayName("Gender"), "index", "home", null, null, null, new
+                    {
+                        searchKeyword = searchKeyword,
+                        sortColumn = "Gender",
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc",
+                        page = page,
+                        pageSize = pageSize,
+                        departmentIds = departmentIds,
+                        genderIds = genderIds,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        minSalary = minSalary,
+                        maxSalary = maxSalary
+
+
+                    }, new { @class = "CSSForHeaders" })
+
+            </th>
+
+            <th>
+                @Html.ActionLink(Html.DisplayName("Age"), "index", "home", null, null, null, new
+                    {
+                        searchKeyword = searchKeyword,
+                        sortColumn = "Age",
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc",
+                        page = page,
+                        pageSize = pageSize,
+                        departmentIds = departmentIds,
+                        genderIds = genderIds,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        minSalary = minSalary,
+                        maxSalary = maxSalary
+                    }, new { @class = "CSSForHeaders" })
+            </th>
+            <th>
+                @Html.DisplayName("City")
+            </th>
+
+            <th>
+                @Html.DisplayName("Email")
+            </th>
+            <th>
+                @Html.DisplayName("Phone Number")
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayName("Salary"), "index", "home", null, null, null, new
+                    {
+                        searchKeyword = searchKeyword,
+                        sortColumn = "Salary",
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc",
+                        page = page,
+                        pageSize = pageSize,
+                        departmentIds = departmentIds,
+                        genderIds = genderIds,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        minSalary = minSalary,
+                        maxSalary = maxSalary
+                    }, new { @class = "CSSForHeaders" })
+            </th>
+
+            <th>
+                @Html.ActionLink(Html.DisplayName("Department Name"), "index", "home", null, null, null, new
+                    {
+                        searchKeyword = searchKeyword,
+                        sortColumn = "DepartmentName",
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc",
+                        page = page,
+                        pageSize = pageSize,
+                        departmentIds = departmentIds,
+                        genderIds = genderIds,
+                        minAge = minAge,
+                        maxAge = maxAge,
+                        minSalary = minSalary,
+                        maxSalary = maxSalary
+
+                    }, new { @class = "CSSForHeaders" })
+
+            </th>
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+
+                    @item.FirstName
+                </td>
+                <td>
+
+                    @item.LastName
+                </td>
+                <td>
+                    @item.GenderName
+
+                </td>
+
+                <td>
+                    @item.Age
+                </td>
+                <td>
+                    @item.City
+                </td>
+
+                <td>
+                    @item.EmailId
+                </td>
+                <td>
+                    @item.PhoneNumber
+                </td>
+                <td>
+                    @item.Salary <span>&#8377;</span>
+                </td>
+
+                <td style="text-align:center">
+                    @item.DepartmentName
+                </td>
+                <td>
+
+                    <button class="btn primary" id="EditButton"> <a asp-action="Edit" asp-route-id="@item.EmployeeId" style="color:white;text-decoration:none">Edit</a> </button>
+                    <button class="btn primary" id="DetailButton">  <a asp-action="Details" asp-route-id="@item.EmployeeId" style="color:white;text-decoration:none">Details</a> </button>
+                    <button class="btn primary" id="DeleteButton"> <a asp-action="Delete" asp-route-id="@item.EmployeeId" style="color:white ; text-decoration:none ">Delete</a></button>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+
+<!-- Pagination -->
+<nav>
+    <ul class="pagination">
+        @if (page > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?page=@(page - 1)&pageSize=@pageSize&sortColumn=@sortColumn&sortDirection=@sortDirection&searchKeyword=@searchKeyword&genderIds=@genderIds&departmentIds=@departmentIds&minAge=@minAge&maxAge=@maxAge&minSalary=@minSalary&maxSalary=@maxSalary">Previous</a>
+            </li>
+        }
+
+        @for (int i = page; i <= page; i++)
+        {
+            <li class="page-item@(i==page?"active":"")">
+                <a class="page-link" href="?page=@i&sortColumn=@sortColumn&sortDirection=@sortDirection&searchKeyword=@searchKeyword">@i</a>
+            </li>
+        }
+
+        @if (page < totalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?page=@(page + 1)&pageSize=@pageSize&sortColumn=@sortColumn&sortDirection=@sortDirection&searchKeyword=@searchKeyword&genderIds=@genderIds&departmentIds=@departmentIds&minAge=@minAge&maxAge=@maxAge&minSalary=@minSalary&maxSalary=@maxSalary">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+
+
+
+
+<script>
+    // Function to gather selected values and update the URL
+    function updateUrlWithQueryParams() {
+        // Get selected departments
+        var departmentIds = [];
+        var genderIds = [];
+
+        // Loop through all department checkboxes and collect selected ones
+        document.querySelectorAll('input[name="departmentIds"]:checked').forEach(function(checkbox) {
+            departmentIds.push(checkbox.value);
+        });
+
+        // Loop through all gender checkboxes and collect selected ones
+        document.querySelectorAll('input[name="genderIds"]:checked').forEach(function(checkbox) {
+            genderIds.push(checkbox.value);
+        });
+
+       var minAge = document.getElementById('minAgeId').value;
+       var maxAge = document.getElementById('maxAgeId').value;
+
+       var minSalary = document.getElementById('minSalaryId').value;
+       var maxSalary = document.getElementById('maxSalaryId').value;
+
+       var pageSize = document.getElementById('pageSizeId').value;
+
+
+
+        // Build the query string
+        var queryString = '';
+
+        if (departmentIds.length > 0) {
+            queryString += 'departmentIds=' + departmentIds.join(',') + '&';
+        }
+        if (genderIds.length > 0) {
+            queryString += 'genderIds=' + genderIds.join(',')+ '&';
+        }
+        if (minAge) {
+            queryString += 'minAge=' + minAge + '&';
+        }
+        if (maxAge) {
+            queryString += 'maxAge=' + maxAge +'&';
+        }
+        if (minSalary) {
+            queryString += 'minSalary=' + minSalary +'&';
+        }
+        if (maxSalary) {
+            queryString += 'maxSalary=' + maxSalary +'&';
+        }
+        if (pageSize) {
+            queryString += 'pageSize=' + pageSize;
+        }
+
+        // Remove the last '&' if present
+        if (queryString.endsWith('&')) {
+            queryString = queryString.slice(0, -1);
+        }
+
+        // Update the browser's URL and reload the page
+        var currentUrl = window.location.href.split('?')[0]; // Remove existing query params
+        var newUrl = currentUrl + '?' + queryString;
+
+        window.location.href = newUrl; // Reload the page with the new URL
+    }
+
+    // Function to restore checkbox selections based on query parameters
+    function restoreSelectionsFromQueryParams() {
+        // Get query parameters
+        var params = new URLSearchParams(window.location.search);
+
+        // Restore department selections
+        var departmentIds = params.get('departmentIds');
+        if (departmentIds) {
+            departmentIds.split(',').forEach(function(id) {
+                var checkbox = document.querySelector(`input[name="departmentIds"][value="${id}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        }
+
+        // Restore gender selections
+        var genderIds = params.get('genderIds');
+        if (genderIds) {
+            genderIds.split(',').forEach(function(id) {
+                var checkbox = document.querySelector(`input[name="genderIds"][value="${id}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        }
+
+
+
+
+    }
+
+    // Attach the updateUrlWithQueryParams function to checkbox change events
+    // document.getElementById('submit').addEventListener('click',updateUrlWithQueryParams());
+
+    // Restore checkbox states on page load
+    window.addEventListener('load', restoreSelectionsFromQueryParams);
+
+</script>
+
+
+
+
+@*Age*@
+
+<script>
+                (function() {
+
+                function addSeparator(nStr) {
+                    nStr += '';
+                    var x = nStr.split('.');
+                    var x1 = x[0];
+                    var x2 = x.length > 1 ? '.' + x[1] : '';
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, '$1' + '.' + '$2');
+                    }
+                    return x1 + x2;
+                }
+
+                function rangeInputChangeEventHandler(e){
+                    var rangeGroup = $(this).attr('name'),
+                        minBtn = $(this).parent().children('.min'),
+                        maxBtn = $(this).parent().children('.max'),
+                        range_min = $(this).parent().children('.range_min'),
+                        range_max = $(this).parent().children('.range_max'),
+                        minVal = parseInt($(minBtn).val()),
+                        maxVal = parseInt($(maxBtn).val());
+                        // origin = $(this).context.className;
+
+                    if(origin === 'min' && minVal > maxVal-5){
+                        $(minBtn).val(maxVal-5);
+                    }
+                    var minVal = parseInt($(minBtn).val());
+                    $(range_min).html(addSeparator(minVal) );
+
+
+                    if(origin === 'max' && maxVal-5 < minVal){
+                        $(maxBtn).val(5+ minVal);
+                    }
+                    var maxVal = parseInt($(maxBtn).val());
+                    $(range_max).html(addSeparator(maxVal) );
+                }
+
+         $('input[type="range"]').on( 'input', rangeInputChangeEventHandler);
+    })();
+
+</script>
+
+
+
+
+@*Salary*@
+
+<script>
+            (function() {
+
+            function addSeparator(nStr) {
+                nStr += '';
+                var x = nStr.split('.');
+                var x1 = x[0];
+                var x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + '.' + '$2');
+                }
+                return x1 + x2;
+            }
+
+            function rangeInputChangeEventHandler(e){
+                var rangeGroup = $(this).attr('name'),
+                    minBtn = $(this).parent().children('.minimum'),
+                    maxBtn = $(this).parent().children('.maximum'),
+                    range_min = $(this).parent().children('.range_minimum'),
+                    range_max = $(this).parent().children('.range_maximum'),
+                    minVal = parseInt($(minBtn).val()),
+                    maxVal = parseInt($(maxBtn).val());
+                    // origin = $(this).context.className;
+
+                if(origin === 'minimum' && minVal > maxVal-5){
+                    $(minBtn).val(maxVal-5);
+                }
+                var minVal = parseInt($(minBtn).val());
+                $(range_min).html(addSeparator(minVal) );
+
+
+                if(origin === 'maximum' && maxVal-5 < minVal){
+                    $(maxBtn).val(5+ minVal);
+                }
+                var maxVal = parseInt($(maxBtn).val());
+                $(range_max).html(addSeparator(maxVal) );
+
+            }
+
+         $('input[type="range"]').on( 'input', rangeInputChangeEventHandler);
+    })();
+
+</script>
+
+
+
+
+
+
